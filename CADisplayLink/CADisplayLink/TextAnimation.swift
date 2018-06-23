@@ -1,19 +1,19 @@
 //
-//  ViewController.swift
+//  TextAnimation.swift
 //  CADisplayLink
 //
-//  Created by Falguni Viral Chauhan on 22/06/18.
+//  Created by Falguni Viral Chauhan on 23/06/18.
 //  Copyright © 2018 Falguni Viral Chauhan. All rights reserved.
 //
 
 import UIKit
 
-class ViewController: UIViewController {
+class TextAnimation: UIViewController {
 
     // MARK: Properties
     lazy var counterLabel: UILabel = {
         let lbl = UILabel()
-        lbl.text = "\(self.startValue)"
+        lbl.text = self.startValue
         lbl.textAlignment = .center
         lbl.numberOfLines = 0
         lbl.textColor = .white
@@ -22,10 +22,10 @@ class ViewController: UIViewController {
     }()
     
     var displayLink: CADisplayLink?
-    let startValue = 0
-    let endValue = 1000
+    let startValue = String()//0
+    let endValue = "This is test animation, This is my first try to use CADisplayLink animation wihch use for animate view respective screen frame rate."
     var animationStartDate: Date?
-    let animationDuration = 2.5
+    let animationDuration = 3.5
     
     
     override func viewDidLoad() {
@@ -44,6 +44,7 @@ class ViewController: UIViewController {
         if displayLink != nil {
             removeDisplayLinkAnimation()
         }
+
         displayLink = CADisplayLink(target: self, selector: #selector(handleAnimation))
         displayLink?.add(to: .main, forMode: .defaultRunLoopMode)
     }
@@ -74,20 +75,18 @@ class ViewController: UIViewController {
         let now = Date()
         let elapsedTime = now.timeIntervalSince(animationStartDate)
         
-        print(now.timeIntervalSince1970)
-        
         if elapsedTime > animationDuration {
             removeDisplayLinkAnimation()
             counterLabel.text = "\(endValue)"
             print("display link animation stoped")
         } else {
             let percentage = elapsedTime / animationDuration
-            let value = startValue + Int(percentage * Double(endValue-startValue))
-            counterLabel.text = "\(value)"
+            let value = Int(percentage * Double(endValue.count))
+            if value != (counterLabel.text?.count)!-1 {
+                let c = endValue[endValue.index(endValue.startIndex, offsetBy: value, limitedBy: endValue.endIndex)!]
+                counterLabel.text?.append(c)
+            }
         }
-        
     }
-    
+
 }
-
-
